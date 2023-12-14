@@ -12,12 +12,18 @@ export default function SearchView() {
 
         dispatch({ type: 'FETCH_GIPHY', payload: searchString })
     }
+    
+    function addNewFavorite(giphy) {
+        console.log(`favoriting giphy:`, giphy);
+        
+        dispatch({ type: 'ADD_FAVORITE_GIPHY' , payload: giphy});
+    }
 
 
     return (
-        <div>
-            <div>
-                <p>this is the search page</p>
+        <div id='search-view'>
+            <div id='input-type'>
+                <p>Find your Giphy!</p>
 
                 <input
                     type='text'
@@ -35,13 +41,14 @@ export default function SearchView() {
                 >Search</button>
             </div>
 
-            {/* <div>
-                {searchResults.data.map((item) =>
-                    <div key={item.id}>
+            <div className='result-display'>
+                {searchResults?.data?.map((item) =>
+                    <div className='result-item' key={item.id}>
                         <img src={item.images.fixed_height.url} alt={item.title} />
+                        <button onClick={() => addNewFavorite(item)}>Favorite</button>
                     </div>
                 )}
-            </div> */}
+            </div>
         </div>
     )
 }

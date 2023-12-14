@@ -10,6 +10,19 @@ import axios from 'axios';
 
 function* rootSaga() {
   yield takeEvery('FETCH_GIPHY', fetchAllGiphy);
+  yield takeEvery('FETCH_FAVORITES', fetchFavorites);
+  yield takeEvery('ADD_FAVORITE_GIPHY', addFavoriteGiphy)
+}
+
+// POST favorite giph to server
+function* addFavoriteGiphy(action) {
+  try {
+    console.log('in addFavoriteGiphy', action.payload);
+    yield axios.post('/api/favorites', action.payload);
+  } catch (error) {
+    console.log(`error in POST`, error);
+    alert(`something went wrong`);
+  }
 }
 
 function* fetchAllGiphy(action) {
@@ -26,6 +39,18 @@ function* fetchAllGiphy(action) {
   }
 }
 
+function* fetchFavorites() {
+  try {
+    console.log('Fetching favorite gifs');
+    const results = yield axios.get('/api/favorites')
+    const setFavoriteAction = {type: 'SET_FAVORITES', payload: results.data};
+    yield put(setFavoriteAction);
+  } catch (error) {
+    console.log('Unable to retrieve favorites');
+    alert('unable to retrieve favorite gifs');
+  }
+}
+
 const searchResults = (state = {}, action) => {
   switch(action.type) {
     case 'SET_RESULTS':
@@ -35,11 +60,21 @@ const searchResults = (state = {}, action) => {
   }
 };
 
+const favoriteResults = (state = [], action) => {
+  switch(action.type) {
+    case'SET_FAVORITES':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   combineReducers({
-    searchResults
+    searchResults,
+    favoriteResults
   }),
   applyMiddleware(sagaMiddleware, logger),
 );

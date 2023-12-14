@@ -24,3 +24,9 @@ INSERT INTO "categories"
 -- categories via foreign key. This is a one-to-many relationship:
 --    One favorite has one category.
 --    One category can be had by many favorites.
+
+CREATE TABLE "favorites" (
+	"id" SERIAL PRIMARY KEY,
+	"gif_url" VARCHAR (1000) NOT NULL);
+	
+INSERT INTO "favorites" ("gif_url") VALUES ('https://media2.giphy.com/media/DhstvI3zZ598Nb1rFf/200.gif?cid=081299639xiv953t2de5fd4pv82gxbgawsdbqhpzfy5w9zn1&ep=v1_gifs_search&rid=200.gif&ct=g');
