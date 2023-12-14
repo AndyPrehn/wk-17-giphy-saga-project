@@ -5,7 +5,7 @@ const router = express.Router();
 
 // return all favorite images
 router.get('/', (req, res) => {
-  const queryText = 'SELECT "gif_url" FROM "favorites";';
+  const queryText = 'SELECT * FROM "favorites";';
   pool.query(queryText)
     .then((result) => {res.send(result.rows)})
     .catch((error) => {
@@ -31,6 +31,18 @@ router.post('/', (req, res) => {
 // update a favorite's associated category
 router.put('/:id', (req, res) => {
   // req.body should contain a category_id to add to this favorite image
+  const updatedGif = req.body;
+
+  const queryText = `Update "favorites" 
+    SET "categorie_id = $1 WHERE id=$2`;
+    const queryValues = [updatedGif.category_id, [req.params.id]];
+
+    pool.query(queryText, queryValues)
+    .then(() => {res.sendStatus(200);})
+    .catch((error) => {
+      console.log('Error adding category', error);
+      res.sendStatus(500);
+    })
   res.sendStatus(200);
 });
 

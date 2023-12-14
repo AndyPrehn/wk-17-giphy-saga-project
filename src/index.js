@@ -42,7 +42,8 @@ function* fetchAllGiphy(action) {
 function* fetchFavorites() {
   try {
     console.log('Fetching favorite gifs');
-    const results = yield axios.get('/api/favorites')
+    const results = yield axios.get('/api/favorites');
+    console.log(`axios complete`);
     const setFavoriteAction = {type: 'SET_FAVORITES', payload: results.data};
     yield put(setFavoriteAction);
   } catch (error) {
